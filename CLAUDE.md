@@ -9,6 +9,9 @@ sourcing data from PostgREST against the `referi` Postgres database in
 `gentrexha/maybornai-monorepo`. Two views: a leaderboard and a
 recent-matches feed. n8n is the only writer; this app never POSTs.
 
+- **Live:** https://referi-frontend.pages.dev
+- **API:** https://referi-api.gentrexha.xyz
+
 `README.md` covers the stack, env vars, and dev commands.
 `docs/superpowers/specs/` holds the design spec and
 `docs/superpowers/plans/` the implementation plan; don't duplicate
@@ -60,10 +63,27 @@ Tests live next to the file they cover (`Foo.ts` ↔ `Foo.test.ts`).
    isolation. Without it, vite-plus can't load `vite.config.ts`. Don't
    delete the file thinking it's redundant.
 
-7. **Cloudflare Pages auto-deploys on push to `main`.** No manual
-   deploy step. The platform-side PostgREST + Caddy bits live in
-   `maybornai-monorepo` and deploy independently via that repo's
-   normal `deploy.sh` flow.
+7. **Cloudflare Pages auto-deploys on push to `main` via GitHub
+   Actions** (NOT via Cloudflare's native Git integration). The
+   `deploy` job in `ci.yml` runs `cloudflare/wrangler-action@v3` with
+   `pages deploy dist`. Required GH secrets:
+   `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`. The platform-side
+   PostgREST + Caddy bits live in `maybornai-monorepo` and deploy
+   independently via that repo's normal `deploy.sh` flow.
+
+8. **CI artifact order is load-bearing.** Playwright's `webServer`
+   command rebuilds `dist/` with `VITE_REFERI_API_URL=https://referi-api.e2e.test`
+   so e2e specs hit mocked routes. The production-flavored `dist/`
+   MUST be uploaded as an artifact BEFORE Playwright runs, otherwise
+   the deploy job will ship the e2e bundle. See `.github/workflows/ci.yml`
+   — the order `Production build → Upload dist → Install Playwright →
+E2E` is intentional, not a stylistic choice.
+
+9. **Don't add CORS headers in Caddy for this API.** PostgREST sets
+   them itself. The Caddy snippet (`maybornai-monorepo/caddy.d/referi-api.caddy`)
+   is just a reverse proxy — adding a duplicate
+   `Access-Control-Allow-Origin: *` produces the spec-illegal
+   `*, *` and browsers refuse the response.
 
 ## Tools available
 
@@ -91,6 +111,17 @@ pnpm exec vp test run <pattern>       # single test file or matching pattern
 pnpm exec vp build                    # production build → dist/
 pnpm exec playwright test             # e2e against built bundle (vite preview)
 ```
+
+## Manual deploy (when CI is bypassed or you're testing a one-off)
+
+```bash
+VITE_REFERI_API_URL=https://referi-api.gentrexha.xyz pnpm exec vp build
+wrangler pages deploy dist --project-name=referi-frontend --branch=main
+```
+
+Requires `wrangler login` once. The `--branch=main` flag tags the
+deploy as production; omit it for a preview deploy on a uniquely-hashed
+URL.
 
 ## Don'ts
 
