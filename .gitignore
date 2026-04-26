@@ -1,0 +1,33 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Override global ~/.gitignore_global rules that swallow project docs
+!docs/
+
+# Node / build artifacts (populated when project is scaffolded)
+node_modules/
+dist/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Test outputs
+playwright-report/
+test-results/
+playwright/.cache/
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
