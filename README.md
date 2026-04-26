@@ -1,47 +1,66 @@
-# Svelte + TS + Vite
+# referi-frontend
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+Public read-only frontend for the **referi** WhatsApp pickup-football
+match tracker. Reads a leaderboard and recent-matches feed from
+PostgREST, served over HTTPS by the Hetzner platform that hosts the
+write-side n8n workflow.
 
-## Recommended IDE Setup
+- **Live:** https://&lt;project&gt;.pages.dev
+- **API:** https://referi-api.gentrexha.xyz
+- **Spec:** [`docs/superpowers/specs/2026-04-26-referi-frontend-design.md`](docs/superpowers/specs/2026-04-26-referi-frontend-design.md)
+- **Implementation plan:** [`docs/superpowers/plans/2026-04-26-referi-frontend.md`](docs/superpowers/plans/2026-04-26-referi-frontend.md)
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## Stack
 
-## Need an official Svelte framework?
+- **Svelte 5** + TypeScript (strict)
+- **Vite Plus** unified toolchain (Vite + Vitest + Oxlint + Oxfmt)
+- **Tailwind CSS v4**
+- **@testing-library/svelte** for component tests
+- **Playwright** for e2e
+- Hosted on **Cloudflare Pages**, GitHub-integration auto-deploy
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Getting started
 
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from "svelte/store";
-export default writable(0);
+```bash
+pnpm install
+cp .env.local.example .env.local   # edit if your API lives elsewhere
+pnpm dev                            # http://localhost:5173
 ```
+
+## Tasks
+
+| Task                              | Command                     |
+| --------------------------------- | --------------------------- |
+| Dev server                        | `pnpm dev`                  |
+| Build                             | `pnpm exec vp build`        |
+| Lint + format + typecheck         | `pnpm exec vp check`        |
+| Unit + component tests            | `pnpm exec vp test run`     |
+| E2E (built once via vite preview) | `pnpm exec playwright test` |
+
+## Environment
+
+| Var                   | Where it's used     | Example                            |
+| --------------------- | ------------------- | ---------------------------------- |
+| `VITE_REFERI_API_URL` | Build- and run-time | `https://referi-api.gentrexha.xyz` |
+
+In Cloudflare Pages: set this in **Project → Settings → Environment
+variables**.
+
+## Deployment
+
+`main` is connected to a Cloudflare Pages project via the standard
+GitHub integration:
+
+| Setting          | Value                |
+| ---------------- | -------------------- |
+| Framework preset | Svelte (or "None")   |
+| Build command    | `pnpm exec vp build` |
+| Build output dir | `dist`               |
+| Root directory   | `/`                  |
+| Node.js version  | 22                   |
+
+## Platform side
+
+The PostgREST service, Caddy reverse-proxy, and SQL migration that
+power this frontend live in `gentrexha/maybornai-monorepo`. See that
+repo's `db/referi/README.md` for the bootstrap steps.
