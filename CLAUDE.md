@@ -14,6 +14,24 @@ recent-matches feed. n8n is the only writer; this app never POSTs.
 `docs/superpowers/plans/` the implementation plan; don't duplicate
 their contents here.
 
+## Where things live
+
+```
+src/
+├── App.svelte          # 2-tab shell, picks view + lazy-loads stores
+├── lib/
+│   ├── api.ts          # PostgREST fetch + schema-leak guard
+│   ├── config.ts       # reads VITE_REFERI_API_URL, throws if missing
+│   ├── format.ts       # date/winner/win-rate formatters
+│   └── types.ts        # PlayerStats, MatchFeedEntry, AsyncState
+├── stores/             # Svelte writable + .load() per view
+└── components/         # Leaderboard, MatchFeed (state-aware)
+
+e2e/                    # Playwright specs + JSON fixtures (mocked network)
+```
+
+Tests live next to the file they cover (`Foo.ts` ↔ `Foo.test.ts`).
+
 ## Critical points
 
 1. **Single env var:** `VITE_REFERI_API_URL`. Set in `.env.local` for
@@ -27,8 +45,11 @@ their contents here.
    contain any `*_jid`-suffixed keys. If a future view ever exposes
    one, the app fails loud (and `api.test.ts` catches it earlier).
 
-4. **Tests live next to source.** `*.test.ts` next to `*.svelte`/`*.ts`.
-   Vitest + jsdom + testing-library/svelte. `e2e/` is Playwright only.
+4. **Component tests need a per-file env pragma.** Vite Plus's
+   vitest config doesn't always pass `environment: 'jsdom'` through to
+   files importing `@testing-library/svelte`. Top of every component
+   `.test.ts` should start with `// @vitest-environment jsdom`. Pure-TS
+   tests (under `lib/`, `stores/`) don't need it.
 
 5. **Vite Plus is the toolchain entry point.** All scripts go through
    `vp` (`vp dev`, `vp build`, `vp test`, `vp check`). The bare `vite`
@@ -51,14 +72,24 @@ their contents here.
 - `/frontend-design:frontend-design` plugin — pair with screenshots
   of the running `pnpm dev` server.
 
+## First-time setup
+
+```bash
+pnpm install
+cp .env.local.example .env.local
+pnpm exec playwright install chromium    # only needed before first e2e run
+```
+
 ## Common commands
 
 ```bash
-pnpm dev                              # local dev server
-pnpm exec vp check                    # lint + format + typecheck
-pnpm exec vp test run                 # unit + component tests
-pnpm exec vp build                    # production build
-pnpm exec playwright test             # e2e against built bundle
+pnpm dev                              # local dev server (http://localhost:5173)
+pnpm exec vp check                    # lint + format-check + typecheck
+pnpm exec vp check --fix              # auto-fix formatting before commit
+pnpm exec vp test run                 # all unit + component tests, headless
+pnpm exec vp test run <pattern>       # single test file or matching pattern
+pnpm exec vp build                    # production build → dist/
+pnpm exec playwright test             # e2e against built bundle (vite preview)
 ```
 
 ## Don'ts
@@ -67,5 +98,5 @@ pnpm exec playwright test             # e2e against built bundle
 - Don't add data caching/SWR libraries; the app fetches once per tab
   view and that's enough.
 - Don't write to PostgREST. n8n owns the write path.
-- Don't replace `vp test --run` with `vp test --run`. Vite Plus uses
-  positional `vp test run` for non-watch mode.
+- Don't write `vp test --run`; Vite Plus uses positional `vp test run`
+  for non-watch mode (the standard vitest `--run` flag isn't wired up).
