@@ -7,6 +7,7 @@ Thumbs.db
 
 # Override global ~/.gitignore_global rules that swallow project docs
 !docs/
+!CLAUDE.md
 
 # Node / build artifacts
 node_modules/
