@@ -8,7 +8,7 @@
     "build": "vp build",
     "preview": "vp preview",
     "test": "vp test",
-    "test:run": "vp test --run",
+    "test:run": "vp test run",
     "check": "vp check",
     "lint": "vp lint",
     "fmt": "vp fmt",
