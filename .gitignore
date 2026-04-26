@@ -8,9 +8,11 @@ Thumbs.db
 # Override global ~/.gitignore_global rules that swallow project docs
 !docs/
 
-# Node / build artifacts (populated when project is scaffolded)
+# Node / build artifacts
 node_modules/
 dist/
+dist-ssr/
+*.local
 coverage/
 .vite/
 *.tsbuildinfo
@@ -26,8 +28,17 @@ playwright/.cache/
 .env.*.local
 
 # Logs
+logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+
+# Misc IDE noise
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

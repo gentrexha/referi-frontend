@@ -85,10 +85,10 @@ only the database.
 
 ### Endpoints exposed
 
-| URL | Purpose |
-|---|---|
-| `GET /player_stats?order=win_rate_pct.desc.nullslast,wins.desc&matches_played=gte.1` | Leaderboard |
-| `GET /match_feed?order=played_on.desc,id.desc&limit=20` | Recent matches |
+| URL                                                                                  | Purpose        |
+| ------------------------------------------------------------------------------------ | -------------- |
+| `GET /player_stats?order=win_rate_pct.desc.nullslast,wins.desc&matches_played=gte.1` | Leaderboard    |
+| `GET /match_feed?order=played_on.desc,id.desc&limit=20`                              | Recent matches |
 
 Filtering, ordering, and pagination come from PostgREST for free —
 no SDK on the frontend, just `fetch`. CORS allows the Pages origin
@@ -179,8 +179,8 @@ Runs on every PR + push to `main`:
 
 ```yaml
 - vp install --frozen-lockfile
-- vp check       # oxlint + oxfmt --check + tsc
-- vp test --run  # vitest headless
+- vp check # oxlint + oxfmt --check + tsc
+- vp test --run # vitest headless
 - vp build
 - vp exec playwright install --with-deps chromium
 - vp exec playwright test
@@ -223,11 +223,11 @@ Cloudflare Pages) starts seeing data.
 
 ## Testing strategy
 
-| Level | Tool | Coverage |
-|---|---|---|
-| Unit | Vitest | `format.ts`, `api.ts` (mocked `fetch`), store transitions |
-| Component | @testing-library/svelte + Vitest | `Leaderboard` renders rows; `MatchFeed` renders cards; loading + empty + error states |
-| E2E | Playwright | leaderboard tab loads with expected columns; matches tab loads with cards; tab switch; against `vite preview` with mocked network |
+| Level     | Tool                             | Coverage                                                                                                                          |
+| --------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Unit      | Vitest                           | `format.ts`, `api.ts` (mocked `fetch`), store transitions                                                                         |
+| Component | @testing-library/svelte + Vitest | `Leaderboard` renders rows; `MatchFeed` renders cards; loading + empty + error states                                             |
+| E2E       | Playwright                       | leaderboard tab loads with expected columns; matches tab loads with cards; tab switch; against `vite preview` with mocked network |
 
 A schema-leak guard in `api.test.ts`: assert that fetched objects
 contain no `phone_jid` or `_jid`-suffixed keys. If a future view
@@ -235,13 +235,13 @@ mistakenly exposes one, the test fails.
 
 ## Risks & open questions
 
-| Concern | Mitigation |
-|---|---|
-| CORS misconfig | Caddy snippet sets `Access-Control-Allow-Origin` explicitly; verified manually with `curl -I -H "Origin: https://<project>.pages.dev"` after the platform-side PR lands. (E2E in CI uses mocked fetch and cannot exercise CORS.) |
-| Schema leak | `web_anon` SELECT-list is the only public surface; CI test asserts no JID keys |
-| n8n schema drift | The two views are the contract; future `record_match` changes don't affect them unless we choose to widen the views |
-| Pages free-tier limits | 500 builds/month, 100k req/day — well above expected traffic |
-| Authenticator password rotation | Documented in platform README; rotate by updating `.env` and bouncing the postgrest container |
+| Concern                         | Mitigation                                                                                                                                                                                                                       |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CORS misconfig                  | Caddy snippet sets `Access-Control-Allow-Origin` explicitly; verified manually with `curl -I -H "Origin: https://<project>.pages.dev"` after the platform-side PR lands. (E2E in CI uses mocked fetch and cannot exercise CORS.) |
+| Schema leak                     | `web_anon` SELECT-list is the only public surface; CI test asserts no JID keys                                                                                                                                                   |
+| n8n schema drift                | The two views are the contract; future `record_match` changes don't affect them unless we choose to widen the views                                                                                                              |
+| Pages free-tier limits          | 500 builds/month, 100k req/day — well above expected traffic                                                                                                                                                                     |
+| Authenticator password rotation | Documented in platform README; rotate by updating `.env` and bouncing the postgrest container                                                                                                                                    |
 
 ## Out-of-scope follow-ups
 

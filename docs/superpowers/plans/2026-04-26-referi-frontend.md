@@ -81,6 +81,7 @@ maybornai-monorepo/
 ### Task 1: Scaffold Svelte 5 + TS via Vite Plus into a temp directory
 
 **Files:**
+
 - Create: `_scaffold/` (temporary, removed in Task 2)
 
 We can't run `vp create` directly into `/Users/vienna/Projects/referi-frontend` because the directory already has a git repo and the spec doc. Scaffold into a sibling temp dir and migrate files.
@@ -90,6 +91,7 @@ We can't run `vp create` directly into `/Users/vienna/Projects/referi-frontend` 
 ```bash
 node --version
 ```
+
 Expected: `v20.x.x` or higher (Vite Plus needs ≥20).
 
 - [ ] **Step 2: Run the scaffolder**
@@ -115,6 +117,7 @@ Note: the `packageManager` field (e.g. `"pnpm@9.x.x"`), the `dependencies` and `
 ```bash
 ls _scaffold/
 ```
+
 Expected to include at least: `package.json`, `vite.config.ts`, `tsconfig.json`, `tsconfig.node.json`, `svelte.config.js`, `src/`, `public/`, `index.html`, `.gitignore`.
 
 ---
@@ -122,6 +125,7 @@ Expected to include at least: `package.json`, `vite.config.ts`, `tsconfig.json`,
 ### Task 2: Move scaffold contents into the repo root
 
 **Files:**
+
 - Create: many (whatever the scaffold produced)
 - Modify: `.gitignore` (merge scaffold's into existing)
 
@@ -207,6 +211,7 @@ git commit -m "feat: scaffold Svelte 5 + TypeScript app via Vite Plus"
 ### Task 3: Add Tailwind CSS v4 + jsdom + testing-library
 
 **Files:**
+
 - Modify: `package.json`, `src/app.css`, `vite.config.ts`
 
 - [ ] **Step 1: Add runtime + dev dependencies**
@@ -226,7 +231,12 @@ Open `src/app.css` and replace its entire contents with:
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
 body {
@@ -241,9 +251,9 @@ body {
 Replace the entire contents of `vite.config.ts` with:
 
 ```ts
-import { defineConfig } from 'vite-plus';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "vite-plus";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [svelte(), tailwindcss()],
@@ -254,16 +264,16 @@ export default defineConfig({
   },
 
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     sourcemap: true,
   },
 
   test: {
-    environment: 'jsdom',
+    environment: "jsdom",
     globals: true,
-    setupFiles: ['./src/test-setup.ts'],
-    include: ['src/**/*.test.{ts,svelte}'],
-    exclude: ['e2e/**', 'node_modules/**', 'dist/**'],
+    setupFiles: ["./src/test-setup.ts"],
+    include: ["src/**/*.test.{ts,svelte}"],
+    exclude: ["e2e/**", "node_modules/**", "dist/**"],
   },
 
   lint: {
@@ -271,12 +281,12 @@ export default defineConfig({
       typeAware: true,
       typeCheck: true,
     },
-    plugins: ['unicorn', 'typescript'],
+    plugins: ["unicorn", "typescript"],
     categories: {
-      correctness: 'error',
-      perf: 'error',
+      correctness: "error",
+      perf: "error",
     },
-    ignorePatterns: ['dist/**', 'node_modules/**', 'e2e/**'],
+    ignorePatterns: ["dist/**", "node_modules/**", "e2e/**"],
   },
 
   fmt: {
@@ -285,7 +295,7 @@ export default defineConfig({
   },
 
   staged: {
-    '*.{js,ts,svelte}': 'vp check --fix',
+    "*.{js,ts,svelte}": "vp check --fix",
   },
 });
 ```
@@ -295,7 +305,7 @@ export default defineConfig({
 Create `src/test-setup.ts`:
 
 ```ts
-import '@testing-library/jest-dom/vitest';
+import "@testing-library/jest-dom/vitest";
 ```
 
 - [ ] **Step 5: Verify Vite still builds**
@@ -318,6 +328,7 @@ git commit -m "feat: add Tailwind v4, jsdom, testing-library, unified vite.confi
 ### Task 4: Strict TypeScript + clean default app shell
 
 **Files:**
+
 - Modify: `tsconfig.json`, `src/main.ts`, `src/App.svelte`
 - Delete: `src/lib/Counter.svelte`, `src/assets/*`, `public/vite.svg` (if scaffold created them)
 
@@ -335,8 +346,8 @@ The scaffold's `tsconfig.json` already extends a Svelte preset; make sure these 
     "isolatedModules": true,
     "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
-    "types": ["vitest/globals", "@testing-library/jest-dom"]
-  }
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+  },
 }
 ```
 
@@ -362,12 +373,12 @@ Replace the entire file with a temporary stub (we'll fill it in Task 13):
 Replace `src/main.ts` with:
 
 ```ts
-import { mount } from 'svelte';
-import './app.css';
-import App from './App.svelte';
+import { mount } from "svelte";
+import "./app.css";
+import App from "./App.svelte";
 
 const app = mount(App, {
-  target: document.getElementById('app')!,
+  target: document.getElementById("app")!,
 });
 
 export default app;
@@ -412,6 +423,7 @@ git commit -m "feat: enable strict TS, clear default scaffold, hook up app.css"
 ### Task 5: Type definitions
 
 **Files:**
+
 - Create: `src/lib/types.ts`
 
 These are the contract between PostgREST and the rest of the app. Everything else imports from here.
@@ -419,7 +431,7 @@ These are the contract between PostgREST and the rest of the app. Everything els
 - [ ] **Step 1: Create the file**
 
 ```ts
-export type Winner = 'team_1' | 'team_2' | 'draw';
+export type Winner = "team_1" | "team_2" | "draw";
 
 export interface PlayerStats {
   phone_jid?: never; // intentional — the public view MUST NOT return JIDs
@@ -433,20 +445,20 @@ export interface PlayerStats {
 
 export interface MatchFeedEntry {
   id: number;
-  played_on: string;          // ISO date: "2026-04-26"
+  played_on: string; // ISO date: "2026-04-26"
   winner: Winner;
   team_1_label: string;
   team_2_label: string;
-  recorded_at: string;        // ISO timestamp
-  team_1_players: string[];   // display names
+  recorded_at: string; // ISO timestamp
+  team_1_players: string[]; // display names
   team_2_players: string[];
 }
 
 export type AsyncState<T> =
-  | { status: 'idle' }
-  | { status: 'loading' }
-  | { status: 'ready'; data: T }
-  | { status: 'error'; error: string };
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "ready"; data: T }
+  | { status: "error"; error: string };
 ```
 
 - [ ] **Step 2: Type-check passes**
@@ -454,6 +466,7 @@ export type AsyncState<T> =
 ```bash
 pnpm exec vp check
 ```
+
 Expected: no errors.
 
 - [ ] **Step 3: Commit**
@@ -468,6 +481,7 @@ git commit -m "feat: define PlayerStats, MatchFeedEntry, AsyncState types"
 ### Task 6: format.ts (TDD)
 
 **Files:**
+
 - Create: `src/lib/format.test.ts` (first), then `src/lib/format.ts`
 
 - [ ] **Step 1: Write the failing test**
@@ -475,44 +489,44 @@ git commit -m "feat: define PlayerStats, MatchFeedEntry, AsyncState types"
 Create `src/lib/format.test.ts`:
 
 ```ts
-import { describe, expect, it } from 'vitest';
-import { formatDate, formatWinner, formatWinRate } from './format';
+import { describe, expect, it } from "vitest";
+import { formatDate, formatWinner, formatWinRate } from "./format";
 
-describe('formatDate', () => {
+describe("formatDate", () => {
   it('renders "Apr 26, 2026" for "2026-04-26"', () => {
-    expect(formatDate('2026-04-26')).toBe('Apr 26, 2026');
+    expect(formatDate("2026-04-26")).toBe("Apr 26, 2026");
   });
 
   it('returns "—" for empty input', () => {
-    expect(formatDate('')).toBe('—');
+    expect(formatDate("")).toBe("—");
   });
 });
 
-describe('formatWinner', () => {
-  it('returns the winning team label for team_1', () => {
-    expect(formatWinner('team_1', 'Reds', 'Blues')).toBe('Reds won');
+describe("formatWinner", () => {
+  it("returns the winning team label for team_1", () => {
+    expect(formatWinner("team_1", "Reds", "Blues")).toBe("Reds won");
   });
 
-  it('returns the winning team label for team_2', () => {
-    expect(formatWinner('team_2', 'Reds', 'Blues')).toBe('Blues won');
+  it("returns the winning team label for team_2", () => {
+    expect(formatWinner("team_2", "Reds", "Blues")).toBe("Blues won");
   });
 
   it('returns "Draw" for draw', () => {
-    expect(formatWinner('draw', 'Reds', 'Blues')).toBe('Draw');
+    expect(formatWinner("draw", "Reds", "Blues")).toBe("Draw");
   });
 });
 
-describe('formatWinRate', () => {
+describe("formatWinRate", () => {
   it('renders "62.5%" for 62.5', () => {
-    expect(formatWinRate(62.5)).toBe('62.5%');
+    expect(formatWinRate(62.5)).toBe("62.5%");
   });
 
   it('renders "100%" for 100', () => {
-    expect(formatWinRate(100)).toBe('100%');
+    expect(formatWinRate(100)).toBe("100%");
   });
 
   it('renders "—" for null', () => {
-    expect(formatWinRate(null)).toBe('—');
+    expect(formatWinRate(null)).toBe("—");
   });
 });
 ```
@@ -530,30 +544,26 @@ Expected: FAIL with "Failed to resolve import './format'".
 Create `src/lib/format.ts`:
 
 ```ts
-import type { Winner } from './types';
+import type { Winner } from "./types";
 
 export function formatDate(iso: string): string {
-  if (!iso) return '—';
+  if (!iso) return "—";
   const d = new Date(iso);
-  return d.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
   });
 }
 
-export function formatWinner(
-  winner: Winner,
-  team1Label: string,
-  team2Label: string,
-): string {
-  if (winner === 'draw') return 'Draw';
-  return `${winner === 'team_1' ? team1Label : team2Label} won`;
+export function formatWinner(winner: Winner, team1Label: string, team2Label: string): string {
+  if (winner === "draw") return "Draw";
+  return `${winner === "team_1" ? team1Label : team2Label} won`;
 }
 
 export function formatWinRate(pct: number | null): string {
-  if (pct === null) return '—';
+  if (pct === null) return "—";
   return `${pct}%`;
 }
 ```
@@ -578,6 +588,7 @@ git commit -m "feat: add format utilities (date, winner, win rate) with tests"
 ### Task 7: api.ts (TDD)
 
 **Files:**
+
 - Create: `src/lib/api.test.ts` (first), then `src/lib/api.ts`
 
 - [ ] **Step 1: Write the failing tests**
@@ -585,17 +596,17 @@ git commit -m "feat: add format utilities (date, winner, win rate) with tests"
 Create `src/lib/api.test.ts`:
 
 ```ts
-import { describe, expect, it, vi } from 'vitest';
-import { fetchLeaderboard, fetchMatchFeed } from './api';
-import type { MatchFeedEntry, PlayerStats } from './types';
+import { describe, expect, it, vi } from "vitest";
+import { fetchLeaderboard, fetchMatchFeed } from "./api";
+import type { MatchFeedEntry, PlayerStats } from "./types";
 
-const BASE = 'https://referi-api.test';
+const BASE = "https://referi-api.test";
 
-describe('fetchLeaderboard', () => {
-  it('hits the player_stats endpoint with the expected query', async () => {
+describe("fetchLeaderboard", () => {
+  it("hits the player_stats endpoint with the expected query", async () => {
     const sample: PlayerStats[] = [
       {
-        display_name: 'Gent',
+        display_name: "Gent",
         matches_played: 4,
         wins: 3,
         draws: 0,
@@ -603,11 +614,12 @@ describe('fetchLeaderboard', () => {
         win_rate_pct: 75,
       },
     ];
-    const fetchMock = vi.fn(async () =>
-      new Response(JSON.stringify(sample), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }),
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify(sample), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
     );
     const out = await fetchLeaderboard(BASE, fetchMock);
     expect(out).toEqual(sample);
@@ -618,51 +630,49 @@ describe('fetchLeaderboard', () => {
     );
   });
 
-  it('throws on non-2xx', async () => {
-    const fetchMock = vi.fn(async () => new Response('boom', { status: 503 }));
+  it("throws on non-2xx", async () => {
+    const fetchMock = vi.fn(async () => new Response("boom", { status: 503 }));
     await expect(fetchLeaderboard(BASE, fetchMock)).rejects.toThrow(/503/);
   });
 
-  it('rejects responses that contain phone_jid (schema-leak guard)', async () => {
-    const leaky = [{ display_name: 'X', phone_jid: '123@lid' }];
-    const fetchMock = vi.fn(async () =>
-      new Response(JSON.stringify(leaky), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }),
+  it("rejects responses that contain phone_jid (schema-leak guard)", async () => {
+    const leaky = [{ display_name: "X", phone_jid: "123@lid" }];
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify(leaky), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
     );
-    await expect(fetchLeaderboard(BASE, fetchMock)).rejects.toThrow(
-      /forbidden field/i,
-    );
+    await expect(fetchLeaderboard(BASE, fetchMock)).rejects.toThrow(/forbidden field/i);
   });
 });
 
-describe('fetchMatchFeed', () => {
-  it('hits the match_feed endpoint with limit and order', async () => {
+describe("fetchMatchFeed", () => {
+  it("hits the match_feed endpoint with limit and order", async () => {
     const sample: MatchFeedEntry[] = [
       {
         id: 1,
-        played_on: '2026-04-26',
-        winner: 'team_1',
-        team_1_label: 'Reds',
-        team_2_label: 'Blues',
-        recorded_at: '2026-04-26T18:00:00Z',
-        team_1_players: ['Gent'],
-        team_2_players: ['Donat'],
+        played_on: "2026-04-26",
+        winner: "team_1",
+        team_1_label: "Reds",
+        team_2_label: "Blues",
+        recorded_at: "2026-04-26T18:00:00Z",
+        team_1_players: ["Gent"],
+        team_2_players: ["Donat"],
       },
     ];
-    const fetchMock = vi.fn(async () =>
-      new Response(JSON.stringify(sample), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }),
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify(sample), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
     );
     const out = await fetchMatchFeed(BASE, 20, fetchMock);
     expect(out).toEqual(sample);
     const [url] = fetchMock.mock.calls[0]!;
-    expect(String(url)).toBe(
-      `${BASE}/match_feed?order=played_on.desc,id.desc&limit=20`,
-    );
+    expect(String(url)).toBe(`${BASE}/match_feed?order=played_on.desc,id.desc&limit=20`);
   });
 });
 ```
@@ -680,14 +690,14 @@ Expected: FAIL — module not found.
 Create `src/lib/api.ts`:
 
 ```ts
-import type { MatchFeedEntry, PlayerStats } from './types';
+import type { MatchFeedEntry, PlayerStats } from "./types";
 
 const FORBIDDEN_KEYS = /(^|_)jid$/i;
 
 function assertNoLeakedKeys(rows: unknown): void {
   if (!Array.isArray(rows)) return;
   for (const row of rows) {
-    if (row && typeof row === 'object') {
+    if (row && typeof row === "object") {
       for (const key of Object.keys(row)) {
         if (FORBIDDEN_KEYS.test(key)) {
           throw new Error(
@@ -699,12 +709,9 @@ function assertNoLeakedKeys(rows: unknown): void {
   }
 }
 
-async function getJson<T>(
-  url: string,
-  fetchImpl: typeof fetch,
-): Promise<T> {
+async function getJson<T>(url: string, fetchImpl: typeof fetch): Promise<T> {
   const res = await fetchImpl(url, {
-    headers: { Accept: 'application/json' },
+    headers: { Accept: "application/json" },
   });
   if (!res.ok) {
     throw new Error(`PostgREST request failed: ${res.status} ${res.statusText}`);
@@ -754,6 +761,7 @@ git commit -m "feat: add PostgREST client with schema-leak guard"
 ### Task 8: leaderboard store (TDD)
 
 **Files:**
+
 - Create: `src/stores/leaderboard.test.ts` (first), then `src/stores/leaderboard.ts`
 
 - [ ] **Step 1: Write the failing test**
@@ -761,14 +769,14 @@ git commit -m "feat: add PostgREST client with schema-leak guard"
 Create `src/stores/leaderboard.test.ts`:
 
 ```ts
-import { get } from 'svelte/store';
-import { describe, expect, it, vi } from 'vitest';
-import { createLeaderboardStore } from './leaderboard';
-import type { PlayerStats } from '../lib/types';
+import { get } from "svelte/store";
+import { describe, expect, it, vi } from "vitest";
+import { createLeaderboardStore } from "./leaderboard";
+import type { PlayerStats } from "../lib/types";
 
 const sample: PlayerStats[] = [
   {
-    display_name: 'Gent',
+    display_name: "Gent",
     matches_played: 4,
     wins: 3,
     draws: 0,
@@ -777,45 +785,43 @@ const sample: PlayerStats[] = [
   },
 ];
 
-describe('leaderboardStore', () => {
-  it('starts in idle', () => {
+describe("leaderboardStore", () => {
+  it("starts in idle", () => {
     const fetchMock = vi.fn();
-    const store = createLeaderboardStore('https://api.test', fetchMock);
-    expect(get(store).status).toBe('idle');
+    const store = createLeaderboardStore("https://api.test", fetchMock);
+    expect(get(store).status).toBe("idle");
   });
 
-  it('transitions idle → loading → ready on load()', async () => {
+  it("transitions idle → loading → ready on load()", async () => {
     let resolveFetch!: (r: Response) => void;
-    const fetchMock = vi.fn(
-      () => new Promise<Response>((r) => (resolveFetch = r)),
-    );
-    const store = createLeaderboardStore('https://api.test', fetchMock);
+    const fetchMock = vi.fn(() => new Promise<Response>((r) => (resolveFetch = r)));
+    const store = createLeaderboardStore("https://api.test", fetchMock);
 
     const p = store.load();
-    expect(get(store).status).toBe('loading');
+    expect(get(store).status).toBe("loading");
 
     resolveFetch(
       new Response(JSON.stringify(sample), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }),
     );
     await p;
 
     const state = get(store);
-    expect(state.status).toBe('ready');
-    if (state.status === 'ready') {
+    expect(state.status).toBe("ready");
+    if (state.status === "ready") {
       expect(state.data).toEqual(sample);
     }
   });
 
-  it('transitions to error on failure', async () => {
-    const fetchMock = vi.fn(async () => new Response('nope', { status: 500 }));
-    const store = createLeaderboardStore('https://api.test', fetchMock);
+  it("transitions to error on failure", async () => {
+    const fetchMock = vi.fn(async () => new Response("nope", { status: 500 }));
+    const store = createLeaderboardStore("https://api.test", fetchMock);
     await store.load();
     const state = get(store);
-    expect(state.status).toBe('error');
-    if (state.status === 'error') {
+    expect(state.status).toBe("error");
+    if (state.status === "error") {
       expect(state.error).toMatch(/500/);
     }
   });
@@ -827,6 +833,7 @@ describe('leaderboardStore', () => {
 ```bash
 pnpm exec vp test --run src/stores/leaderboard.test.ts
 ```
+
 Expected: FAIL — module not found.
 
 - [ ] **Step 3: Create the implementation**
@@ -834,9 +841,9 @@ Expected: FAIL — module not found.
 Create `src/stores/leaderboard.ts`:
 
 ```ts
-import { writable, type Writable } from 'svelte/store';
-import { fetchLeaderboard } from '../lib/api';
-import type { AsyncState, PlayerStats } from '../lib/types';
+import { writable, type Writable } from "svelte/store";
+import { fetchLeaderboard } from "../lib/api";
+import type { AsyncState, PlayerStats } from "../lib/types";
 
 export interface LeaderboardStore extends Writable<AsyncState<PlayerStats[]>> {
   load(): Promise<void>;
@@ -846,19 +853,19 @@ export function createLeaderboardStore(
   baseUrl: string,
   fetchImpl: typeof fetch = fetch,
 ): LeaderboardStore {
-  const inner = writable<AsyncState<PlayerStats[]>>({ status: 'idle' });
+  const inner = writable<AsyncState<PlayerStats[]>>({ status: "idle" });
   return {
     subscribe: inner.subscribe,
     set: inner.set,
     update: inner.update,
     async load() {
-      inner.set({ status: 'loading' });
+      inner.set({ status: "loading" });
       try {
         const data = await fetchLeaderboard(baseUrl, fetchImpl);
-        inner.set({ status: 'ready', data });
+        inner.set({ status: "ready", data });
       } catch (e) {
         const error = e instanceof Error ? e.message : String(e);
-        inner.set({ status: 'error', error });
+        inner.set({ status: "error", error });
       }
     },
   };
@@ -885,6 +892,7 @@ git commit -m "feat: add leaderboard store with idle/loading/ready/error states"
 ### Task 9: matches store (TDD)
 
 **Files:**
+
 - Create: `src/stores/matches.test.ts` (first), then `src/stores/matches.ts`
 
 - [ ] **Step 1: Write the failing test**
@@ -892,52 +900,52 @@ git commit -m "feat: add leaderboard store with idle/loading/ready/error states"
 Create `src/stores/matches.test.ts`:
 
 ```ts
-import { get } from 'svelte/store';
-import { describe, expect, it, vi } from 'vitest';
-import { createMatchesStore } from './matches';
-import type { MatchFeedEntry } from '../lib/types';
+import { get } from "svelte/store";
+import { describe, expect, it, vi } from "vitest";
+import { createMatchesStore } from "./matches";
+import type { MatchFeedEntry } from "../lib/types";
 
 const sample: MatchFeedEntry[] = [
   {
     id: 1,
-    played_on: '2026-04-26',
-    winner: 'team_1',
-    team_1_label: 'Reds',
-    team_2_label: 'Blues',
-    recorded_at: '2026-04-26T18:00:00Z',
-    team_1_players: ['Gent'],
-    team_2_players: ['Donat'],
+    played_on: "2026-04-26",
+    winner: "team_1",
+    team_1_label: "Reds",
+    team_2_label: "Blues",
+    recorded_at: "2026-04-26T18:00:00Z",
+    team_1_players: ["Gent"],
+    team_2_players: ["Donat"],
   },
 ];
 
-describe('matchesStore', () => {
-  it('starts in idle', () => {
+describe("matchesStore", () => {
+  it("starts in idle", () => {
     const fetchMock = vi.fn();
-    const store = createMatchesStore('https://api.test', fetchMock);
-    expect(get(store).status).toBe('idle');
+    const store = createMatchesStore("https://api.test", fetchMock);
+    expect(get(store).status).toBe("idle");
   });
 
-  it('loads and surfaces ready state', async () => {
+  it("loads and surfaces ready state", async () => {
     const fetchMock = vi.fn(
       async () =>
         new Response(JSON.stringify(sample), {
           status: 200,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }),
     );
-    const store = createMatchesStore('https://api.test', fetchMock);
+    const store = createMatchesStore("https://api.test", fetchMock);
     await store.load();
     const state = get(store);
-    expect(state.status).toBe('ready');
-    if (state.status === 'ready') expect(state.data).toEqual(sample);
+    expect(state.status).toBe("ready");
+    if (state.status === "ready") expect(state.data).toEqual(sample);
   });
 
-  it('surfaces error on failure', async () => {
-    const fetchMock = vi.fn(async () => new Response('x', { status: 502 }));
-    const store = createMatchesStore('https://api.test', fetchMock);
+  it("surfaces error on failure", async () => {
+    const fetchMock = vi.fn(async () => new Response("x", { status: 502 }));
+    const store = createMatchesStore("https://api.test", fetchMock);
     await store.load();
     const state = get(store);
-    expect(state.status).toBe('error');
+    expect(state.status).toBe("error");
   });
 });
 ```
@@ -947,6 +955,7 @@ describe('matchesStore', () => {
 ```bash
 pnpm exec vp test --run src/stores/matches.test.ts
 ```
+
 Expected: FAIL — module not found.
 
 - [ ] **Step 3: Create the implementation**
@@ -954,31 +963,28 @@ Expected: FAIL — module not found.
 Create `src/stores/matches.ts`:
 
 ```ts
-import { writable, type Writable } from 'svelte/store';
-import { fetchMatchFeed } from '../lib/api';
-import type { AsyncState, MatchFeedEntry } from '../lib/types';
+import { writable, type Writable } from "svelte/store";
+import { fetchMatchFeed } from "../lib/api";
+import type { AsyncState, MatchFeedEntry } from "../lib/types";
 
 export interface MatchesStore extends Writable<AsyncState<MatchFeedEntry[]>> {
   load(): Promise<void>;
 }
 
-export function createMatchesStore(
-  baseUrl: string,
-  fetchImpl: typeof fetch = fetch,
-): MatchesStore {
-  const inner = writable<AsyncState<MatchFeedEntry[]>>({ status: 'idle' });
+export function createMatchesStore(baseUrl: string, fetchImpl: typeof fetch = fetch): MatchesStore {
+  const inner = writable<AsyncState<MatchFeedEntry[]>>({ status: "idle" });
   return {
     subscribe: inner.subscribe,
     set: inner.set,
     update: inner.update,
     async load() {
-      inner.set({ status: 'loading' });
+      inner.set({ status: "loading" });
       try {
         const data = await fetchMatchFeed(baseUrl, 20, fetchImpl);
-        inner.set({ status: 'ready', data });
+        inner.set({ status: "ready", data });
       } catch (e) {
         const error = e instanceof Error ? e.message : String(e);
-        inner.set({ status: 'error', error });
+        inner.set({ status: "error", error });
       }
     },
   };
@@ -990,6 +996,7 @@ export function createMatchesStore(
 ```bash
 pnpm exec vp test --run src/stores/matches.test.ts
 ```
+
 Expected: 3 tests pass.
 
 - [ ] **Step 5: Commit**
@@ -1006,6 +1013,7 @@ git commit -m "feat: add matches store"
 ### Task 10: Leaderboard component (TDD)
 
 **Files:**
+
 - Create: `src/components/Leaderboard.test.ts` (first), then `src/components/Leaderboard.svelte`
 
 - [ ] **Step 1: Write the failing tests**
@@ -1013,14 +1021,14 @@ git commit -m "feat: add matches store"
 Create `src/components/Leaderboard.test.ts`:
 
 ```ts
-import { render, screen } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
-import { writable } from 'svelte/store';
-import Leaderboard from './Leaderboard.svelte';
-import type { AsyncState, PlayerStats } from '../lib/types';
+import { render, screen } from "@testing-library/svelte";
+import { describe, expect, it } from "vitest";
+import { writable } from "svelte/store";
+import Leaderboard from "./Leaderboard.svelte";
+import type { AsyncState, PlayerStats } from "../lib/types";
 
 const player = (over: Partial<PlayerStats> = {}): PlayerStats => ({
-  display_name: 'Gent',
+  display_name: "Gent",
   matches_played: 4,
   wins: 3,
   draws: 0,
@@ -1033,41 +1041,41 @@ function withState(state: AsyncState<PlayerStats[]>) {
   return writable<AsyncState<PlayerStats[]>>(state);
 }
 
-describe('Leaderboard', () => {
-  it('renders skeleton rows when loading', () => {
-    render(Leaderboard, { props: { store: withState({ status: 'loading' }) } });
-    expect(screen.getByTestId('leaderboard-skeleton')).toBeInTheDocument();
+describe("Leaderboard", () => {
+  it("renders skeleton rows when loading", () => {
+    render(Leaderboard, { props: { store: withState({ status: "loading" }) } });
+    expect(screen.getByTestId("leaderboard-skeleton")).toBeInTheDocument();
   });
 
-  it('renders an empty state when no players', () => {
+  it("renders an empty state when no players", () => {
     render(Leaderboard, {
-      props: { store: withState({ status: 'ready', data: [] }) },
+      props: { store: withState({ status: "ready", data: [] }) },
     });
     expect(screen.getByText(/no matches recorded yet/i)).toBeInTheDocument();
   });
 
-  it('renders a row per player when ready', () => {
+  it("renders a row per player when ready", () => {
     render(Leaderboard, {
       props: {
         store: withState({
-          status: 'ready',
-          data: [player({ display_name: 'Gent' }), player({ display_name: 'Donat' })],
+          status: "ready",
+          data: [player({ display_name: "Gent" }), player({ display_name: "Donat" })],
         }),
       },
     });
-    expect(screen.getByText('Gent')).toBeInTheDocument();
-    expect(screen.getByText('Donat')).toBeInTheDocument();
-    expect(screen.getByText('75%')).toBeInTheDocument();
+    expect(screen.getByText("Gent")).toBeInTheDocument();
+    expect(screen.getByText("Donat")).toBeInTheDocument();
+    expect(screen.getByText("75%")).toBeInTheDocument();
   });
 
-  it('renders an error banner with retry on error', () => {
+  it("renders an error banner with retry on error", () => {
     render(Leaderboard, {
       props: {
-        store: withState({ status: 'error', error: 'boom' }),
+        store: withState({ status: "error", error: "boom" }),
       },
     });
     expect(screen.getByText(/couldn't load/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
   });
 });
 ```
@@ -1169,6 +1177,7 @@ git commit -m "feat: add Leaderboard component with loading/empty/error states"
 ### Task 11: MatchFeed component (TDD)
 
 **Files:**
+
 - Create: `src/components/MatchFeed.test.ts` (first), then `src/components/MatchFeed.svelte`
 
 - [ ] **Step 1: Write the failing tests**
@@ -1176,21 +1185,21 @@ git commit -m "feat: add Leaderboard component with loading/empty/error states"
 Create `src/components/MatchFeed.test.ts`:
 
 ```ts
-import { render, screen } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
-import { writable } from 'svelte/store';
-import MatchFeed from './MatchFeed.svelte';
-import type { AsyncState, MatchFeedEntry } from '../lib/types';
+import { render, screen } from "@testing-library/svelte";
+import { describe, expect, it } from "vitest";
+import { writable } from "svelte/store";
+import MatchFeed from "./MatchFeed.svelte";
+import type { AsyncState, MatchFeedEntry } from "../lib/types";
 
 const match = (over: Partial<MatchFeedEntry> = {}): MatchFeedEntry => ({
   id: 1,
-  played_on: '2026-04-26',
-  winner: 'team_1',
-  team_1_label: 'Reds',
-  team_2_label: 'Blues',
-  recorded_at: '2026-04-26T18:00:00Z',
-  team_1_players: ['Gent', 'Donat'],
-  team_2_players: ['Lirim', 'Arben'],
+  played_on: "2026-04-26",
+  winner: "team_1",
+  team_1_label: "Reds",
+  team_2_label: "Blues",
+  recorded_at: "2026-04-26T18:00:00Z",
+  team_1_players: ["Gent", "Donat"],
+  team_2_players: ["Lirim", "Arben"],
   ...over,
 });
 
@@ -1198,46 +1207,46 @@ function withState(state: AsyncState<MatchFeedEntry[]>) {
   return writable<AsyncState<MatchFeedEntry[]>>(state);
 }
 
-describe('MatchFeed', () => {
-  it('renders skeletons when loading', () => {
-    render(MatchFeed, { props: { store: withState({ status: 'loading' }) } });
-    expect(screen.getByTestId('matches-skeleton')).toBeInTheDocument();
+describe("MatchFeed", () => {
+  it("renders skeletons when loading", () => {
+    render(MatchFeed, { props: { store: withState({ status: "loading" }) } });
+    expect(screen.getByTestId("matches-skeleton")).toBeInTheDocument();
   });
 
-  it('renders empty state when no matches', () => {
+  it("renders empty state when no matches", () => {
     render(MatchFeed, {
-      props: { store: withState({ status: 'ready', data: [] }) },
+      props: { store: withState({ status: "ready", data: [] }) },
     });
     expect(screen.getByText(/no matches recorded yet/i)).toBeInTheDocument();
   });
 
-  it('renders cards with player names + winner', () => {
+  it("renders cards with player names + winner", () => {
     render(MatchFeed, {
-      props: { store: withState({ status: 'ready', data: [match()] }) },
+      props: { store: withState({ status: "ready", data: [match()] }) },
     });
     expect(screen.getByText(/Apr 26, 2026/)).toBeInTheDocument();
     expect(screen.getByText(/Reds won/)).toBeInTheDocument();
-    expect(screen.getByText('Gent, Donat')).toBeInTheDocument();
-    expect(screen.getByText('Lirim, Arben')).toBeInTheDocument();
+    expect(screen.getByText("Gent, Donat")).toBeInTheDocument();
+    expect(screen.getByText("Lirim, Arben")).toBeInTheDocument();
   });
 
-  it('renders Draw label when winner is draw', () => {
+  it("renders Draw label when winner is draw", () => {
     render(MatchFeed, {
       props: {
         store: withState({
-          status: 'ready',
-          data: [match({ winner: 'draw' })],
+          status: "ready",
+          data: [match({ winner: "draw" })],
         }),
       },
     });
-    expect(screen.getByText('Draw')).toBeInTheDocument();
+    expect(screen.getByText("Draw")).toBeInTheDocument();
   });
 
-  it('shows error banner with retry', () => {
+  it("shows error banner with retry", () => {
     render(MatchFeed, {
-      props: { store: withState({ status: 'error', error: 'oops' }) },
+      props: { store: withState({ status: "error", error: "oops" }) },
     });
-    expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
   });
 });
 ```
@@ -1336,6 +1345,7 @@ git commit -m "feat: add MatchFeed component"
 ### Task 12: Tabbed App.svelte that wires stores
 
 **Files:**
+
 - Modify: `src/App.svelte`
 - Create: `src/lib/config.ts`
 
@@ -1347,10 +1357,10 @@ Create `src/lib/config.ts`:
 const RAW = import.meta.env.VITE_REFERI_API_URL;
 if (!RAW) {
   throw new Error(
-    'VITE_REFERI_API_URL is not set — add it to .env.local or your Cloudflare Pages env',
+    "VITE_REFERI_API_URL is not set — add it to .env.local or your Cloudflare Pages env",
   );
 }
-export const API_BASE_URL: string = RAW.replace(/\/+$/, '');
+export const API_BASE_URL: string = RAW.replace(/\/+$/, "");
 ```
 
 - [ ] **Step 2: Add a local env file for dev**
@@ -1446,6 +1456,7 @@ Open `http://localhost:5173`. With no live API the page renders skeletons → er
 ```bash
 pnpm exec vp test --run
 ```
+
 Expected: every test from Tasks 6-11 passes.
 
 - [ ] **Step 6: Commit**
@@ -1462,6 +1473,7 @@ git commit -m "feat: wire stores into tabbed App shell"
 ### Task 13: Playwright install + config
 
 **Files:**
+
 - Create: `playwright.config.ts`, `e2e/fixtures/leaderboard.json`, `e2e/fixtures/matches.json`
 - Modify: `package.json` (scripts)
 
@@ -1480,9 +1492,30 @@ Expected: chromium installed.
 
 ```json
 [
-  { "display_name": "Gent",  "matches_played": 4, "wins": 3, "draws": 0, "losses": 1, "win_rate_pct": 75 },
-  { "display_name": "Donat", "matches_played": 4, "wins": 2, "draws": 1, "losses": 1, "win_rate_pct": 50 },
-  { "display_name": "Lirim", "matches_played": 3, "wins": 1, "draws": 1, "losses": 1, "win_rate_pct": 33.3 }
+  {
+    "display_name": "Gent",
+    "matches_played": 4,
+    "wins": 3,
+    "draws": 0,
+    "losses": 1,
+    "win_rate_pct": 75
+  },
+  {
+    "display_name": "Donat",
+    "matches_played": 4,
+    "wins": 2,
+    "draws": 1,
+    "losses": 1,
+    "win_rate_pct": 50
+  },
+  {
+    "display_name": "Lirim",
+    "matches_played": 3,
+    "wins": 1,
+    "draws": 1,
+    "losses": 1,
+    "win_rate_pct": 33.3
+  }
 ]
 ```
 
@@ -1516,19 +1549,19 @@ Expected: chromium installed.
 - [ ] **Step 3: Create `playwright.config.ts`**
 
 ```ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 const PORT = 4173;
-const E2E_API_BASE = 'https://referi-api.e2e.test';
+const E2E_API_BASE = "https://referi-api.e2e.test";
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: "./e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   use: {
     baseURL: `http://localhost:${PORT}`,
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
   },
   webServer: {
     command: `pnpm exec vp build && pnpm exec vite preview --port ${PORT} --strictPort`,
@@ -1541,8 +1574,8 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { browserName: 'chromium' },
+      name: "chromium",
+      use: { browserName: "chromium" },
     },
   ],
 });
@@ -1569,41 +1602,42 @@ git commit -m "test: scaffold Playwright with deterministic JSON fixtures"
 ### Task 14: Leaderboard e2e spec
 
 **Files:**
+
 - Create: `e2e/leaderboard.spec.ts`
 
 - [ ] **Step 1: Create the spec**
 
 ```ts
-import { expect, test } from '@playwright/test';
-import leaderboard from './fixtures/leaderboard.json' with { type: 'json' };
+import { expect, test } from "@playwright/test";
+import leaderboard from "./fixtures/leaderboard.json" with { type: "json" };
 
-const API = 'https://referi-api.e2e.test';
+const API = "https://referi-api.e2e.test";
 
 test.beforeEach(async ({ page }) => {
   await page.route(`${API}/player_stats**`, async (route) => {
     await route.fulfill({
       status: 200,
-      contentType: 'application/json',
+      contentType: "application/json",
       body: JSON.stringify(leaderboard),
     });
   });
 });
 
-test('leaderboard renders rows for every player in the fixture', async ({ page }) => {
-  await page.goto('/');
+test("leaderboard renders rows for every player in the fixture", async ({ page }) => {
+  await page.goto("/");
   for (const p of leaderboard) {
     await expect(page.getByText(p.display_name)).toBeVisible();
   }
-  await expect(page.getByText('75%')).toBeVisible();
+  await expect(page.getByText("75%")).toBeVisible();
 });
 
-test('leaderboard shows error banner when API 5xxs', async ({ page }) => {
+test("leaderboard shows error banner when API 5xxs", async ({ page }) => {
   await page.unroute(`${API}/player_stats**`);
   await page.route(`${API}/player_stats**`, async (route) => {
-    await route.fulfill({ status: 503, body: 'down' });
+    await route.fulfill({ status: 503, body: "down" });
   });
-  await page.goto('/');
-  await expect(page.getByRole('button', { name: /retry/i })).toBeVisible();
+  await page.goto("/");
+  await expect(page.getByRole("button", { name: /retry/i })).toBeVisible();
 });
 ```
 
@@ -1612,6 +1646,7 @@ test('leaderboard shows error banner when API 5xxs', async ({ page }) => {
 ```bash
 pnpm exec playwright test e2e/leaderboard.spec.ts
 ```
+
 Expected: 2 tests pass.
 
 - [ ] **Step 3: Commit**
@@ -1626,33 +1661,34 @@ git commit -m "test: e2e leaderboard renders fixture + error fallback"
 ### Task 15: Match-history e2e spec
 
 **Files:**
+
 - Create: `e2e/match-history.spec.ts`
 
 - [ ] **Step 1: Create the spec**
 
 ```ts
-import { expect, test } from '@playwright/test';
-import matches from './fixtures/matches.json' with { type: 'json' };
+import { expect, test } from "@playwright/test";
+import matches from "./fixtures/matches.json" with { type: "json" };
 
-const API = 'https://referi-api.e2e.test';
+const API = "https://referi-api.e2e.test";
 
 test.beforeEach(async ({ page }) => {
   await page.route(`${API}/match_feed**`, async (route) => {
     await route.fulfill({
       status: 200,
-      contentType: 'application/json',
+      contentType: "application/json",
       body: JSON.stringify(matches),
     });
   });
 });
 
-test('matches tab renders all matches with player names and winner', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('tab-matches').click();
-  await expect(page.getByText('Apr 26, 2026')).toBeVisible();
+test("matches tab renders all matches with player names and winner", async ({ page }) => {
+  await page.goto("/");
+  await page.getByTestId("tab-matches").click();
+  await expect(page.getByText("Apr 26, 2026")).toBeVisible();
   await expect(page.getByText(/Reds won/)).toBeVisible();
-  await expect(page.getByText('Draw')).toBeVisible();
-  await expect(page.getByText('Gent, Donat')).toBeVisible();
+  await expect(page.getByText("Draw")).toBeVisible();
+  await expect(page.getByText("Gent, Donat")).toBeVisible();
 });
 ```
 
@@ -1674,43 +1710,44 @@ git commit -m "test: e2e match feed renders fixture with winner labels"
 ### Task 16: Tab-switch e2e spec
 
 **Files:**
+
 - Create: `e2e/tab-switch.spec.ts`
 
 - [ ] **Step 1: Create the spec**
 
 ```ts
-import { expect, test } from '@playwright/test';
-import leaderboard from './fixtures/leaderboard.json' with { type: 'json' };
-import matches from './fixtures/matches.json' with { type: 'json' };
+import { expect, test } from "@playwright/test";
+import leaderboard from "./fixtures/leaderboard.json" with { type: "json" };
+import matches from "./fixtures/matches.json" with { type: "json" };
 
-const API = 'https://referi-api.e2e.test';
+const API = "https://referi-api.e2e.test";
 
 test.beforeEach(async ({ page }) => {
   await page.route(`${API}/player_stats**`, (r) =>
     r.fulfill({
       status: 200,
-      contentType: 'application/json',
+      contentType: "application/json",
       body: JSON.stringify(leaderboard),
     }),
   );
   await page.route(`${API}/match_feed**`, (r) =>
     r.fulfill({
       status: 200,
-      contentType: 'application/json',
+      contentType: "application/json",
       body: JSON.stringify(matches),
     }),
   );
 });
 
-test('tabs switch between leaderboard and matches', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByText('Win %')).toBeVisible();
+test("tabs switch between leaderboard and matches", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByText("Win %")).toBeVisible();
 
-  await page.getByTestId('tab-matches').click();
-  await expect(page.getByText('Apr 26, 2026')).toBeVisible();
+  await page.getByTestId("tab-matches").click();
+  await expect(page.getByText("Apr 26, 2026")).toBeVisible();
 
-  await page.getByTestId('tab-leaderboard').click();
-  await expect(page.getByText('Win %')).toBeVisible();
+  await page.getByTestId("tab-leaderboard").click();
+  await expect(page.getByText("Win %")).toBeVisible();
 });
 ```
 
@@ -1719,6 +1756,7 @@ test('tabs switch between leaderboard and matches', async ({ page }) => {
 ```bash
 pnpm exec playwright test
 ```
+
 Expected: all specs pass.
 
 - [ ] **Step 3: Commit**
@@ -1735,6 +1773,7 @@ git commit -m "test: e2e tab switch keeps both views functional"
 ### Task 17: GitHub Actions CI workflow
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 - [ ] **Step 1: Create the workflow**
@@ -1760,8 +1799,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -1806,11 +1845,12 @@ git commit -m "ci: add GitHub Actions workflow (lint, test, build, e2e)"
 ### Task 18: README
 
 **Files:**
+
 - Create: `README.md`
 
 - [ ] **Step 1: Write README**
 
-```markdown
+````markdown
 # referi-frontend
 
 Public read-only frontend for the **referi** WhatsApp pickup-football
@@ -1839,22 +1879,23 @@ pnpm install
 cp .env.local.example .env.local   # edit if your API lives elsewhere
 pnpm dev                            # http://localhost:5173
 ```
+````
 
 ## Tasks
 
-| Task              | Command                              |
-|-------------------|--------------------------------------|
-| Dev server        | `pnpm dev`                           |
-| Build             | `pnpm exec vp build`                 |
-| Lint + format + typecheck | `pnpm exec vp check`         |
-| Unit + component tests | `pnpm exec vp test --run`       |
+| Task                              | Command                     |
+| --------------------------------- | --------------------------- |
+| Dev server                        | `pnpm dev`                  |
+| Build                             | `pnpm exec vp build`        |
+| Lint + format + typecheck         | `pnpm exec vp check`        |
+| Unit + component tests            | `pnpm exec vp test --run`   |
 | E2E (built once via vite preview) | `pnpm exec playwright test` |
 
 ## Environment
 
-| Var                   | Where it's used        | Example                              |
-|-----------------------|------------------------|--------------------------------------|
-| `VITE_REFERI_API_URL` | Build- and run-time    | `https://referi-api.gentrexha.xyz`   |
+| Var                   | Where it's used     | Example                            |
+| --------------------- | ------------------- | ---------------------------------- |
+| `VITE_REFERI_API_URL` | Build- and run-time | `https://referi-api.gentrexha.xyz` |
 
 In Cloudflare Pages: set this in **Project → Settings → Environment variables**.
 
@@ -1863,19 +1904,20 @@ In Cloudflare Pages: set this in **Project → Settings → Environment variable
 `main` is connected to a Cloudflare Pages project via the standard
 GitHub integration:
 
-| Setting             | Value                            |
-|---------------------|----------------------------------|
-| Framework preset    | Svelte (or "None")               |
-| Build command       | `pnpm exec vp build`             |
-| Build output dir    | `dist`                           |
-| Root directory      | `/`                              |
-| Node.js version     | 22                               |
+| Setting          | Value                |
+| ---------------- | -------------------- |
+| Framework preset | Svelte (or "None")   |
+| Build command    | `pnpm exec vp build` |
+| Build output dir | `dist`               |
+| Root directory   | `/`                  |
+| Node.js version  | 22                   |
 
 ## Platform side
 
 The PostgREST service, Caddy reverse-proxy, and SQL migration that
 power this frontend live in `gentrexha/maybornai-monorepo`. See that
 repo's `db/referi/README.md` for the bootstrap steps.
+
 ```
 
 - [ ] **Step 2: Create env template**
@@ -1883,26 +1925,29 @@ repo's `db/referi/README.md` for the bootstrap steps.
 `.env.local.example`:
 
 ```
+
 VITE_REFERI_API_URL=https://referi-api.gentrexha.xyz
-```
+
+````
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add README.md .env.local.example
 git commit -m "docs: add README and .env.local.example"
-```
+````
 
 ---
 
 ### Task 19: CLAUDE.md (initial draft)
 
 **Files:**
+
 - Create: `CLAUDE.md`
 
 - [ ] **Step 1: Write the initial CLAUDE.md**
 
-```markdown
+````markdown
 # CLAUDE.md
 
 Guidance for Claude Code working in this repo.
@@ -1957,6 +2002,7 @@ pnpm exec vp test --run               # unit + component tests
 pnpm exec vp build                    # production build
 pnpm exec playwright test             # e2e against built bundle
 ```
+````
 
 ## Don'ts
 
@@ -1964,20 +2010,22 @@ pnpm exec playwright test             # e2e against built bundle
 - Don't add data caching/SWR libraries; the app fetches once per tab
   view and that's enough.
 - Don't write to PostgREST. n8n owns the write path.
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add CLAUDE.md
 git commit -m "docs: add CLAUDE.md (initial)"
-```
+````
 
 ---
 
 ### Task 20: Improve CLAUDE.md via the improver skill
 
 **Files:**
+
 - Modify: `CLAUDE.md`
 
 - [ ] **Step 1: Invoke the claude-md-improver skill**
@@ -2047,6 +2095,7 @@ Open the produced `*.pages.dev` URL. Without the platform-side PR landed yet, th
 ### Task 22: Branch + SQL migration — public view + roles
 
 **Files (in `maybornai-monorepo`):**
+
 - Create: `db/referi/004_public_views.sql`
 - Modify: `db/referi/README.md`
 
@@ -2106,11 +2155,11 @@ GRANT SELECT ON referi.match_feed   TO web_anon;
 
 Append a new section:
 
-```markdown
+````markdown
 ## Public read-only views (file order continued)
 
-| File | Purpose |
-|------|---------|
+| File                   | Purpose                                              |
+| ---------------------- | ---------------------------------------------------- |
 | `004_public_views.sql` | `match_feed` view, `web_anon` role, PostgREST grants |
 
 `004` depends on `001` (tables) and `002` (`player_stats` view); apply both first.
@@ -2134,20 +2183,23 @@ SQL
 docker exec -i postgres psql -U referi -d referi -v ON_ERROR_STOP=1 \
   < db/referi/004_public_views.sql
 ```
-```
+````
+
+````
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add db/referi/004_public_views.sql db/referi/README.md
 git commit -m "feat(referi): add public match_feed view + web_anon role for PostgREST"
-```
+````
 
 ---
 
 ### Task 23: Caddy snippet for `referi-api.gentrexha.xyz`
 
 **Files (in `maybornai-monorepo`):**
+
 - Create: `caddy.d/referi-api.caddy`
 
 - [ ] **Step 1: Create the snippet**
@@ -2188,6 +2240,7 @@ git commit -m "feat(referi): add Caddy reverse proxy for PostgREST API"
 ### Task 24: PostgREST service in `compose.yml`
 
 **Files (in `maybornai-monorepo`):**
+
 - Modify: `compose.yml`
 - Modify: `.env.example`
 
@@ -2196,26 +2249,26 @@ git commit -m "feat(referi): add Caddy reverse proxy for PostgREST API"
 Inside the existing `services:` block, after the `waha` service, add:
 
 ```yaml
-  postgrest:
-    image: postgrest/postgrest:v13.0.5
-    container_name: postgrest
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      PGRST_DB_URI: postgres://authenticator:${REFERI_POSTGREST_AUTHENTICATOR_PASSWORD}@postgres:5432/referi
-      PGRST_DB_SCHEMAS: referi
-      PGRST_DB_ANON_ROLE: web_anon
-      PGRST_OPENAPI_SERVER_PROXY_URI: https://referi-api.gentrexha.xyz
-      PGRST_DB_POOL: '10'
-      PGRST_DB_POOL_TIMEOUT: '10'
-    env_file:
-      - .env
-    ports:
-      - '127.0.0.1:3001:3000'
-    networks:
-      - maybornai-network
+postgrest:
+  image: postgrest/postgrest:v13.0.5
+  container_name: postgrest
+  restart: unless-stopped
+  depends_on:
+    postgres:
+      condition: service_healthy
+  environment:
+    PGRST_DB_URI: postgres://authenticator:${REFERI_POSTGREST_AUTHENTICATOR_PASSWORD}@postgres:5432/referi
+    PGRST_DB_SCHEMAS: referi
+    PGRST_DB_ANON_ROLE: web_anon
+    PGRST_OPENAPI_SERVER_PROXY_URI: https://referi-api.gentrexha.xyz
+    PGRST_DB_POOL: "10"
+    PGRST_DB_POOL_TIMEOUT: "10"
+  env_file:
+    - .env
+  ports:
+    - "127.0.0.1:3001:3000"
+  networks:
+    - maybornai-network
 ```
 
 - [ ] **Step 2: Append env-var stanza to `.env.example`**
@@ -2278,6 +2331,7 @@ EOF
 I checked the plan against the spec:
 
 **Coverage:**
+
 - ✅ Two views (Leaderboard, MatchFeed) — Tasks 10, 11
 - ✅ One platform-side migration — Task 22
 - ✅ PostgREST service + Caddy — Tasks 23, 24
