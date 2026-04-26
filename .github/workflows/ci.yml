@@ -85,5 +85,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=referi-frontend --branch=main
+          command: pages deploy dist --project-name=referi --branch=main
           packageManager: pnpm

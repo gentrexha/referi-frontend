@@ -9,7 +9,7 @@ sourcing data from PostgREST against the `referi` Postgres database in
 `gentrexha/maybornai-monorepo`. Two views: a leaderboard and a
 recent-matches feed. n8n is the only writer; this app never POSTs.
 
-- **Live:** https://referi-frontend.pages.dev
+- **Live:** https://referi.pages.dev
 - **API:** https://referi-api.gentrexha.xyz
 
 `README.md` covers the stack, env vars, and dev commands.
@@ -116,7 +116,7 @@ pnpm exec playwright test             # e2e against built bundle (vite preview)
 
 ```bash
 VITE_REFERI_API_URL=https://referi-api.gentrexha.xyz pnpm exec vp build
-wrangler pages deploy dist --project-name=referi-frontend --branch=main
+wrangler pages deploy dist --project-name=referi --branch=main
 ```
 
 Requires `wrangler login` once. The `--branch=main` flag tags the

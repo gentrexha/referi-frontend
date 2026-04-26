@@ -5,7 +5,7 @@ match tracker. Reads a leaderboard and recent-matches feed from
 PostgREST, served over HTTPS by the Hetzner platform that hosts the
 write-side n8n workflow.
 
-- **Live:** https://referi-frontend.pages.dev
+- **Live:** https://referi.pages.dev
 - **API:** https://referi-api.gentrexha.xyz
 - **Spec:** [`docs/superpowers/specs/2026-04-26-referi-frontend-design.md`](docs/superpowers/specs/2026-04-26-referi-frontend-design.md)
 - **Implementation plan:** [`docs/superpowers/plans/2026-04-26-referi-frontend.md`](docs/superpowers/plans/2026-04-26-referi-frontend.md)
@@ -57,7 +57,7 @@ push main → CI: vp check → vp test run → vp build → upload dist
                                               │
                                               ▼ (if CI green)
                               wrangler pages deploy dist
-                              → https://referi-frontend.pages.dev
+                              → https://referi.pages.dev
 ```
 
 GitHub Actions secrets required (set in
@@ -76,7 +76,7 @@ Manual deploy (bypassing CI):
 
 ```bash
 VITE_REFERI_API_URL=https://referi-api.gentrexha.xyz pnpm exec vp build
-wrangler pages deploy dist --project-name=referi-frontend --branch=main
+wrangler pages deploy dist --project-name=referi --branch=main
 ```
 
 ## Platform side
