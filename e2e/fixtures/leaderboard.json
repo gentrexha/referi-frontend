@@ -1,0 +1,26 @@
+[
+  {
+    "display_name": "Gent",
+    "matches_played": 4,
+    "wins": 3,
+    "draws": 0,
+    "losses": 1,
+    "win_rate_pct": 75
+  },
+  {
+    "display_name": "Donat",
+    "matches_played": 4,
+    "wins": 2,
+    "draws": 1,
+    "losses": 1,
+    "win_rate_pct": 50
+  },
+  {
+    "display_name": "Lirim",
+    "matches_played": 3,
+    "wins": 1,
+    "draws": 1,
+    "losses": 1,
+    "win_rate_pct": 33.3
+  }
+]

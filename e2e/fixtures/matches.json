@@ -1,0 +1,22 @@
+[
+  {
+    "id": 2,
+    "played_on": "2026-04-26",
+    "winner": "team_1",
+    "team_1_label": "Reds",
+    "team_2_label": "Blues",
+    "recorded_at": "2026-04-26T19:00:00Z",
+    "team_1_players": ["Gent", "Donat"],
+    "team_2_players": ["Lirim", "Arben"]
+  },
+  {
+    "id": 1,
+    "played_on": "2026-04-19",
+    "winner": "draw",
+    "team_1_label": "Reds",
+    "team_2_label": "Blues",
+    "recorded_at": "2026-04-19T19:00:00Z",
+    "team_1_players": ["Gent", "Lirim"],
+    "team_2_players": ["Donat", "Arben"]
+  }
+]
