@@ -1,23 +1,23 @@
 import { expect, test } from "@playwright/test";
-import matches from "./fixtures/matches.json" with { type: "json" };
-
-const API = "https://referi-api.e2e.test";
+import { mockApi } from "./mock";
 
 test.beforeEach(async ({ page }) => {
-  await page.route(`${API}/match_feed**`, async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify(matches),
-    });
-  });
+  await mockApi(page);
 });
 
-test("matches tab renders all matches with player names and winner", async ({ page }) => {
+test("matches tab renders cards with date and winner badge", async ({ page }) => {
   await page.goto("/");
   await page.getByTestId("tab-matches").click();
-  await expect(page.getByText("Apr 26, 2026")).toBeVisible();
-  await expect(page.getByText(/Reds won/)).toBeVisible();
+  const cards = page.getByTestId("match-card");
+  await expect(cards.first()).toBeVisible();
+  await expect(cards.first()).toContainText(/Reds won/);
   await expect(page.getByText("Draw")).toBeVisible();
-  await expect(page.getByText("Gent, Donat")).toBeVisible();
+});
+
+test("clicking a player chip in a match navigates to their profile", async ({ page }) => {
+  await page.goto("/");
+  await page.getByTestId("tab-matches").click();
+  await page.getByRole("button", { name: "Gent" }).first().click();
+  await expect(page.getByRole("heading", { name: "Gent" })).toBeVisible();
+  await expect(page.getByTestId("profile-history")).toBeVisible();
 });

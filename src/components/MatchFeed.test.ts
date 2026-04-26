@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/svelte";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { describe, expect, it, vi } from "vitest";
 import { writable } from "svelte/store";
 import MatchFeed from "./MatchFeed.svelte";
 import type { AsyncState, MatchFeedEntry } from "../lib/types";
@@ -28,38 +28,37 @@ describe("MatchFeed", () => {
   });
 
   it("renders empty state when no matches", () => {
-    render(MatchFeed, {
-      props: { store: withState({ status: "ready", data: [] }) },
-    });
+    render(MatchFeed, { props: { store: withState({ status: "ready", data: [] }) } });
     expect(screen.getByText(/no matches recorded yet/i)).toBeInTheDocument();
   });
 
-  it("renders cards with player names + winner", () => {
-    render(MatchFeed, {
-      props: { store: withState({ status: "ready", data: [match()] }) },
-    });
+  it("renders cards with date, winner badge, and player buttons", () => {
+    render(MatchFeed, { props: { store: withState({ status: "ready", data: [match()] }) } });
     expect(screen.getByText(/Apr 26, 2026/)).toBeInTheDocument();
     expect(screen.getByText(/Reds won/)).toBeInTheDocument();
-    expect(screen.getByText("Gent, Donat")).toBeInTheDocument();
-    expect(screen.getByText("Lirim, Arben")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Gent" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Arben" })).toBeInTheDocument();
   });
 
-  it("renders Draw label when winner is draw", () => {
+  it("shows Draw when winner is draw", () => {
     render(MatchFeed, {
-      props: {
-        store: withState({
-          status: "ready",
-          data: [match({ winner: "draw" })],
-        }),
-      },
+      props: { store: withState({ status: "ready", data: [match({ winner: "draw" })] }) },
     });
     expect(screen.getByText("Draw")).toBeInTheDocument();
   });
 
-  it("shows error banner with retry", () => {
+  it("calls onSelect when a player name is clicked", async () => {
+    const onSelect = vi.fn();
     render(MatchFeed, {
-      props: { store: withState({ status: "error", error: "oops" }) },
+      props: { store: withState({ status: "ready", data: [match()] }), onSelect },
     });
+    const link = screen.getByRole("button", { name: "Donat" });
+    await fireEvent.click(link);
+    expect(onSelect).toHaveBeenCalledWith("Donat");
+  });
+
+  it("shows error banner with retry", () => {
+    render(MatchFeed, { props: { store: withState({ status: "error", error: "oops" }) } });
     expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
   });
 });

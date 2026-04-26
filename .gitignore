@@ -23,6 +23,12 @@ playwright-report/
 test-results/
 playwright/.cache/
 
+# Superpowers brainstorm session artifacts
+.superpowers/
+
+# Playwright MCP plugin scratch files
+.playwright-mcp/
+
 # Env / secrets
 .env
 .env.local

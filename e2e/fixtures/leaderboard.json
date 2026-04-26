@@ -22,5 +22,13 @@
     "draws": 1,
     "losses": 1,
     "win_rate_pct": 33.3
+  },
+  {
+    "display_name": "Arben",
+    "matches_played": 2,
+    "wins": 0,
+    "draws": 1,
+    "losses": 1,
+    "win_rate_pct": 0
   }
 ]

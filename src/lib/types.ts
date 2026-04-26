@@ -1,5 +1,9 @@
 export type Winner = "team_1" | "team_2" | "draw";
 
+export type Team = "team_1" | "team_2";
+
+export type MatchResult = "win" | "draw" | "loss";
+
 export interface PlayerStats {
   phone_jid?: never;
   display_name: string;
@@ -26,3 +30,20 @@ export type AsyncState<T> =
   | { status: "loading" }
   | { status: "ready"; data: T }
   | { status: "error"; error: string };
+
+export type SortKey =
+  | "display_name"
+  | "matches_played"
+  | "wins"
+  | "draws"
+  | "losses"
+  | "win_rate_pct";
+
+export type SortDir = "asc" | "desc";
+
+export interface SortState {
+  key: SortKey;
+  dir: SortDir;
+}
+
+export type View = "leaderboard" | "matches" | "players";

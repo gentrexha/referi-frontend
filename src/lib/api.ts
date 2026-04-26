@@ -33,7 +33,7 @@ export function fetchLeaderboard(
   baseUrl: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<PlayerStats[]> {
-  const url = `${baseUrl}/player_stats?order=win_rate_pct.desc.nullslast,wins.desc&matches_played=gte.1`;
+  const url = `${baseUrl}/player_stats?order=matches_played.desc,wins.desc&matches_played=gte.1`;
   return getJson<PlayerStats[]>(url, fetchImpl);
 }
 
@@ -44,4 +44,21 @@ export function fetchMatchFeed(
 ): Promise<MatchFeedEntry[]> {
   const url = `${baseUrl}/match_feed?order=played_on.desc,id.desc&limit=${limit}`;
   return getJson<MatchFeedEntry[]>(url, fetchImpl);
+}
+
+export function buildPlayerHistoryUrl(baseUrl: string, displayName: string): string {
+  // PostgREST jsonb `cs` (contains) check on team_1_players OR team_2_players.
+  // The value is a JSON array literal: ["DisplayName"]. We pass a single
+  // element so there's no internal comma — safe inside or=(..,..).
+  const arrayJson = JSON.stringify([displayName]);
+  const encoded = encodeURIComponent(arrayJson);
+  return `${baseUrl}/match_feed?or=(team_1_players.cs.${encoded},team_2_players.cs.${encoded})&order=played_on.desc,id.desc`;
+}
+
+export function fetchPlayerHistory(
+  baseUrl: string,
+  displayName: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<MatchFeedEntry[]> {
+  return getJson<MatchFeedEntry[]>(buildPlayerHistoryUrl(baseUrl, displayName), fetchImpl);
 }
