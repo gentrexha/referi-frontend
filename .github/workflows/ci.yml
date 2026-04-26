@@ -32,24 +32,10 @@ jobs:
       - name: Unit + component tests
         run: pnpm exec vp test run
 
-      - name: Build
+      - name: Production build
         run: pnpm exec vp build
         env:
           VITE_REFERI_API_URL: ${{ vars.VITE_REFERI_API_URL || 'https://referi-api.gentrexha.xyz' }}
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: E2E tests
-        run: pnpm exec playwright test
-
-      - name: Upload Playwright report on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
 
       - name: Upload dist for deploy job
         id: upload
@@ -59,6 +45,20 @@ jobs:
           name: dist
           path: dist/
           retention-days: 1
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: E2E tests (rebuilds dist/ with test API URL — must run after upload)
+        run: pnpm exec playwright test
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
 
   deploy:
     needs: build-test
