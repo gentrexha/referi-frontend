@@ -61,4 +61,17 @@ describe("MatchFeed", () => {
     render(MatchFeed, { props: { store: withState({ status: "error", error: "oops" }) } });
     expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
   });
+
+  it("renders cards when a team has multiple Anonymous players", () => {
+    // match_feed substitutes "Anonymous" for every is_anonymous player, so
+    // the same string can appear twice on one team. The keyed each blocks
+    // must not throw.
+    const masked = match({
+      team_1_players: ["Gent", "Anonymous", "Anonymous"],
+      team_2_players: ["Anonymous", "Anonymous", "Arben"],
+    });
+    render(MatchFeed, { props: { store: withState({ status: "ready", data: [masked] }) } });
+    expect(screen.getByText(/Reds won/)).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Anonymous" })).toHaveLength(4);
+  });
 });
