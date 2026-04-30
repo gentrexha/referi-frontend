@@ -85,6 +85,7 @@
   label: string,
   align: "left" | "right" = "right",
   hideOnMobile = false,
+  mobileLabel?: string,
 )}
   <th
     aria-sort={ariaSort(key)}
@@ -101,7 +102,12 @@
       onclick={() => setSort(key)}
       class="inline-flex items-center gap-1 {align === 'right' ? 'flex-row-reverse' : ''}"
     >
-      <span>{label}</span>
+      {#if mobileLabel}
+        <span class="sm:hidden">{mobileLabel}</span>
+        <span class="hidden sm:inline">{label}</span>
+      {:else}
+        <span>{label}</span>
+      {/if}
       <span aria-hidden="true" class="text-emerald-700 {sort.key === key ? '' : 'opacity-0'}"
         >{arrow(key) || "↕"}</span
       >
@@ -169,21 +175,21 @@
         No players match "{search}".
       </p>
     {:else}
-      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white">
+      <div class="overflow-x-auto rounded-lg border border-zinc-200 bg-white">
         <table class="w-full table-auto text-sm tabular-nums">
           <thead class="border-b border-zinc-200 bg-white">
             <tr>
               <th
                 scope="col"
-                class="w-10 px-2 py-2 text-left text-[11px] font-medium tracking-wide text-zinc-500 sm:px-3"
+                class="px-1.5 py-2 text-left text-[11px] font-medium tracking-wide text-zinc-500 sm:px-3"
                 >#</th
               >
               {@render headCell("display_name", "Player", "left")}
-              {@render headCell("matches_played", "Played", "right")}
+              {@render headCell("matches_played", "Played", "right", false, "MP")}
               {@render headCell("wins", "W", "right")}
               {@render headCell("draws", "D", "right", true)}
               {@render headCell("losses", "L", "right", true)}
-              {@render headCell("win_rate_pct", "Win %", "right")}
+              {@render headCell("win_rate_pct", "Win %", "right", false, "%")}
             </tr>
           </thead>
           <tbody>
@@ -195,7 +201,7 @@
                 class="cursor-pointer border-t border-zinc-100 transition-colors first:border-t-0 hover:bg-zinc-50 focus-within:bg-zinc-50"
                 onclick={() => onSelect?.(p.display_name)}
               >
-                <td class="px-2 py-2.5 sm:px-3">
+                <td class="px-1.5 py-2.5 sm:px-3">
                   <span
                     class="inline-flex h-5 min-w-[1.5rem] items-center justify-center rounded px-1.5 text-[11px] font-semibold {rankClass(
                       i + 1,
@@ -236,7 +242,9 @@
                         style="width: {barWidth}%"
                       ></span>
                     </span>
-                    <span>{formatWinRate(p.win_rate_pct)}</span>
+                    <span class="inline-block min-w-[2.75rem] text-right"
+                      >{formatWinRate(p.win_rate_pct)}</span
+                    >
                   </span>
                 </td>
               </tr>
