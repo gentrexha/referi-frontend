@@ -217,7 +217,7 @@
                       <div>
                         <span class="text-zinc-500">With: </span>
                         <span class="inline-flex flex-wrap gap-x-1.5 gap-y-1">
-                          {#each pm.teammates as t (t)}
+                          {#each pm.teammates as t, i (`${t}-${i}`)}
                             <button
                               type="button"
                               data-testid="player-link"
@@ -234,7 +234,7 @@
                       <div>
                         <span class="text-zinc-500">vs: </span>
                         <span class="inline-flex flex-wrap gap-x-1.5 gap-y-1">
-                          {#each pm.opponents as o (o)}
+                          {#each pm.opponents as o, i (`${o}-${i}`)}
                             <button
                               type="button"
                               data-testid="player-link"

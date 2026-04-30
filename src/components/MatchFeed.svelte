@@ -70,7 +70,7 @@
                 {m.team_1_label}
               </p>
               <ul class="mt-1 flex flex-wrap gap-x-1.5 gap-y-1 text-sm">
-                {#each m.team_1_players as name (name)}
+                {#each m.team_1_players as name, i (`${name}-${i}`)}
                   <li>
                     <button
                       type="button"
@@ -89,7 +89,7 @@
                 {m.team_2_label}
               </p>
               <ul class="mt-1 flex flex-wrap gap-x-1.5 gap-y-1 text-sm">
-                {#each m.team_2_players as name (name)}
+                {#each m.team_2_players as name, i (`${name}-${i}`)}
                   <li>
                     <button
                       type="button"

@@ -155,4 +155,35 @@ describe("PlayerProfile", () => {
     expect(screen.getByText(/couldn't load match history/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
   });
+
+  it("renders matches when a team has multiple Anonymous players", () => {
+    // match_feed masks every is_anonymous player as the literal "Anonymous",
+    // so a roster with two opt-outs on the same team produces duplicate
+    // strings in team_X_players. The keyed each blocks must not collide.
+    const masked: MatchFeedEntry[] = [
+      {
+        id: 9,
+        played_on: "2026-04-26",
+        winner: "team_1",
+        team_1_label: "Reds",
+        team_2_label: "Blues",
+        recorded_at: "2026-04-26T19:00:00Z",
+        team_1_players: ["Gent", "Anonymous", "Anonymous"],
+        team_2_players: ["Anonymous", "Anonymous", "Arben"],
+      },
+    ];
+    render(PlayerProfile, {
+      props: {
+        displayName: "Gent",
+        summary,
+        history: withState({ status: "ready", data: masked }),
+        onBack: vi.fn(),
+      },
+    });
+    const history = screen.getByTestId("profile-history");
+    expect(within(history).getAllByRole("listitem")).toHaveLength(1);
+    // Both teammates and both opponents render despite duplicate names.
+    const teammateLinks = within(history).getAllByText("Anonymous");
+    expect(teammateLinks.length).toBe(4);
+  });
 });
